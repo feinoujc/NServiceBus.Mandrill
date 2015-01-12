@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>NServiceBus.Mandrill</id>
+    <version>$version$</version>
+    <authors>feinoujc</authors>
+    <owners>feinoujc</owners>
+    <title>NService Satellite to process mandrill api requests sent transactionally via NServiceBus</title>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/feinoujc/NServiceBus.Mandrill</projectUrl>
+    <description>NService Satellite to process mandrill api requests sent transactionally via NServiceBus</description>
+    <tags>Mandrill NServiceBus Email MailChimp</tags>
+    <dependencies>
+      <dependency id="Mandrill.net" version="[0.3,)" />
+      <dependency id="NServiceBus" version="[5.0,6.0)"/>
+    </dependencies>
+  </metadata>  
+</package> 
