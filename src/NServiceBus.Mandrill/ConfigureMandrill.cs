@@ -1,5 +1,6 @@
 using System;
 using Mandrill;
+using NServiceBus.Configuration.AdvanceExtensibility;
 using NServiceBus.Mandrill;
 
 namespace NServiceBus
@@ -9,7 +10,7 @@ namespace NServiceBus
         public static BusConfiguration UseMandrill(this BusConfiguration settings, string apiKey, bool replyResult = false)
         {
             if (apiKey == null) throw new ArgumentNullException("apiKey");
-            return UseMandrill(settings, new MandrillApi(apiKey));
+            return UseMandrill(settings, new MandrillApi(apiKey), replyResult);
         }
 
         public static BusConfiguration UseMandrill(this BusConfiguration settings, MandrillApi api, bool replyResult = false)
@@ -21,12 +22,9 @@ namespace NServiceBus
 
         private static BusConfiguration UseMandrill(this BusConfiguration settings, IMandrillMessagesApi mandrillApi, bool replyResult = false)
         {
-            settings.RegisterComponents(x =>
-            {
-                x.RegisterSingleton(mandrillApi);
-                x.ConfigureComponent<MandrillSatellite>(DependencyLifecycle.InstancePerCall);
-                x.ConfigureProperty<MandrillSatellite>(satellite => satellite.ReplyResult, replyResult);
-            });
+            settings.GetSettings().Set("NServiceBus.Mandrill.ReplyResult", replyResult);
+            
+            settings.RegisterComponents(x => x.RegisterSingleton(mandrillApi));
 
             settings.EnableFeature<Features.Mandrill>();
             return settings;
