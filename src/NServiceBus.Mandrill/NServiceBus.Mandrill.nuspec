@@ -5,7 +5,7 @@
     <version>$version$</version>
     <authors>feinoujc</authors>
     <owners>feinoujc</owners>
-    <title>NService Satellite to process mandrill api requests sent transactionally via NServiceBus</title>
+    <title>NServiceBus.Mandrill</title>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/feinoujc/NServiceBus.Mandrill</projectUrl>
     <description>NService Satellite to process mandrill api requests sent transactionally via NServiceBus</description>
