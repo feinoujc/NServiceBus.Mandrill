@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mandrill.Model;
+using NServiceBus.Mandrill;
 using NServiceBus.Unicast;
 
-namespace NServiceBus.Mandrill
+namespace NServiceBus
 {
     public static class MandrillBusExtensions
     {
@@ -23,13 +23,9 @@ namespace NServiceBus.Mandrill
 
         public static void SendEmail(this IBus bus, MandrillMessage message)
         {
-            var msg = new SendMandrillEmail
-            {
-                Message = message
-            };
+            var msg = new SendMandrillEmail(message);
             SendInternal(bus, msg);
         }
-
 
         public static void SendEmailTemplate(this IBus bus, MandrillMessage message, string templateName,
             IList<MandrillTemplateContent> templateContents = null)
@@ -39,13 +35,8 @@ namespace NServiceBus.Mandrill
                 throw new ArgumentNullException("templateName");
             }
 
-            var msg = new SendMandrillEmail
-            {
-                Message = message,
-                TemplateName = templateName,
-                TemplateContents = templateContents != null ? templateContents.ToList() : null
-            };
-
+            var msg = new SendMandrillEmail(message, templateName, templateContents);
+        
             SendInternal(bus, msg);
         }
 

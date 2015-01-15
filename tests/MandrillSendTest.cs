@@ -1,4 +1,9 @@
 ﻿using System;
+using System.IO;
+using Mandrill.Model;
+using Mandrill.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NServiceBus;
 using NServiceBus.Mandrill;
 using NServiceBus.Testing;
@@ -27,8 +32,11 @@ namespace Tests
             Test.Handler<SendEmailTestHandler>()
                 .ExpectSendToDestination<SendMandrillEmail>((message, address) =>
                 {
-                    Assert.AreEqual("Hello World", message.Message.Text);
-                    Assert.AreEqual("This is a test", message.Message.Subject);
+
+                    var body = message.GetMessage();
+
+                    Assert.AreEqual("Hello World", body.Text);
+                    Assert.AreEqual("This is a test", body.Subject);
                     Assert.IsTrue(address.Queue.EndsWith(".mandrill", StringComparison.OrdinalIgnoreCase));
                     
                     return true;
@@ -42,8 +50,10 @@ namespace Tests
             Test.Handler<SendEmailTestHandler>()
                 .ExpectSendToDestination<SendMandrillEmail>((message, address) =>
                 {
-                    Assert.AreEqual("Hello World", message.Message.Text);
-                    Assert.AreEqual("This is a test", message.Message.Subject);
+                    var body = message.GetMessage();
+
+                    Assert.AreEqual("Hello World", body.Text);
+                    Assert.AreEqual("This is a test", body.Subject);
                     Assert.AreEqual("test-template", message.TemplateName);
                     Assert.IsTrue(address.Queue.EndsWith(".mandrill", StringComparison.OrdinalIgnoreCase));
 

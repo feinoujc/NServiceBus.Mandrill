@@ -13,7 +13,6 @@ namespace Sample
         public void Customize(BusConfiguration configuration)
         {
             var apiKey = ConfigurationManager.AppSettings["MANDRILL_API_KEY"];
-
             configuration.UseMandrill(apiKey: apiKey, replyResult: true);
             configuration.UsePersistence<InMemoryPersistence>();
         }
@@ -35,6 +34,7 @@ namespace Sample
                 mail.AddTo("nservicebus@example.com", "Udi Dahan");
                 mail.Subject = "NServiceBus.Mandrill test";
                 mail.Text = "Hello NSericeBus! \nRegards";
+
                 Bus.SendEmail(mail);
             }
         }

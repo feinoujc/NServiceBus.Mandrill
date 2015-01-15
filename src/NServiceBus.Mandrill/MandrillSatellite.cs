@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Mandrill;
 using Mandrill.Model;
 using Mandrill.Serialization;
-
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NServiceBus.Logging;
 using NServiceBus.Satellites;
@@ -20,14 +19,24 @@ namespace NServiceBus.Mandrill
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (MandrillSatellite));
 
-        public IMessageSerializer MessageSerializer { get; set; }
-        public IMandrillMessagesApi MandrillApi { get; set; }
-        public IBus Bus { get; set; }
-
         public MandrillSatellite()
         {
             Disabled = true;
         }
+
+        public IMessageSerializer MessageSerializer { get; set; }
+        public IMandrillMessagesApi MandrillApi { get; set; }
+        public IBus Bus { get; set; }
+
+        /// <summary>
+        ///     The <see cref="Address" /> for this <see cref="ISatellite" /> to use when receiving messages.
+        /// </summary>
+        public Address ReplyAddress { get; set; }
+
+        /// <summary>
+        ///     Returns the result of the api call as a message on the master node addresss
+        /// </summary>
+        public bool ReplyResult { get; set; }
 
         /// <summary>
         ///     This method is called when a message is available to be processed.
@@ -38,19 +47,19 @@ namespace NServiceBus.Mandrill
         public bool Handle(TransportMessage message)
         {
             SendMandrillEmail sendEmail;
-
             using (var stream = new MemoryStream(message.Body))
             {
                 sendEmail = (SendMandrillEmail) MessageSerializer.Deserialize(stream, new[] {typeof (SendMandrillEmail)}).First();
             }
 
-            var mandrillMessage = sendEmail.Message;
-
+         
             if (Logger.IsDebugEnabled)
             {
-                Logger.Debug("Sending mandrill message api request: " +
-                             JObject.FromObject(mandrillMessage, MandrillSerializer.Instance));
+                Logger.Debug("Sending mandrill message api request: " + sendEmail.MessageBody);
             }
+
+
+            var mandrillMessage = sendEmail.GetMessage();
 
             IList<MandrillSendMessageResponse> results;
             if (sendEmail.TemplateName != null)
@@ -107,18 +116,8 @@ namespace NServiceBus.Mandrill
         public Address InputAddress { get; set; }
 
         /// <summary>
-        ///     The <see cref="Address" /> for this <see cref="ISatellite" /> to use when receiving messages.
-        /// </summary>
-        public Address ReplyAddress { get; set; }
-
-        /// <summary>
         ///     Set to <code>true</code> to disable this <see cref="ISatellite" />.
         /// </summary>
         public bool Disabled { get; set; }
-
-        /// <summary>
-        /// Returns the result of the api call as a message on the master node addresss
-        /// </summary>
-        public bool ReplyResult { get; set; }
     }
 }

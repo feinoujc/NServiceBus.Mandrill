@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mandrill.net">
-      <HintPath>..\packages\Mandrill.net.0.3.0.0\lib\net45\Mandrill.net.dll</HintPath>
+      <HintPath>..\packages\Mandrill.net.0.4.0.0\lib\net45\Mandrill.net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

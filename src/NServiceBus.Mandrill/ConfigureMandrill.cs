@@ -1,7 +1,6 @@
 using System;
 using Mandrill;
 using NServiceBus.Configuration.AdvanceExtensibility;
-using NServiceBus.Mandrill;
 
 namespace NServiceBus
 {
