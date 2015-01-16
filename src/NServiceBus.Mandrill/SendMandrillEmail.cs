@@ -8,20 +8,20 @@ using Newtonsoft.Json.Linq;
 
 namespace NServiceBus.Mandrill
 {
-    internal class SendMandrillEmail : IMessage
+    public class SendMandrillEmail : IMessage
     {
-        public SendMandrillEmail()
+        protected internal SendMandrillEmail()
         {
             TemplateContents = new List<MandrillTemplateContent>();
         }
 
-        public SendMandrillEmail(MandrillMessage message)
+        protected internal SendMandrillEmail(MandrillMessage message)
             : this()
         {
             MessageBody = SerializeMessageBody(message);
         }
 
-        public SendMandrillEmail(MandrillMessage message, string templateName, IEnumerable<MandrillTemplateContent> templateContents)
+        protected internal SendMandrillEmail(MandrillMessage message, string templateName, IEnumerable<MandrillTemplateContent> templateContents)
             : this()
         {
             MessageBody = SerializeMessageBody(message);
@@ -39,7 +39,7 @@ namespace NServiceBus.Mandrill
             return JObject.FromObject(message, MandrillSerializer.Instance).ToString();
         }
 
-        protected internal MandrillMessage GetMessage()
+        public MandrillMessage GetMessage()
         {
             using (var reader = new JsonTextReader(new StringReader(MessageBody)))
                 return JObject.Load(reader).ToObject<MandrillMessage>(MandrillSerializer.Instance);

@@ -3,9 +3,7 @@ using System.IO;
 using System.Linq;
 using Mandrill;
 using Mandrill.Model;
-using Mandrill.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 using NServiceBus.Logging;
 using NServiceBus.Satellites;
 using NServiceBus.Serialization;
