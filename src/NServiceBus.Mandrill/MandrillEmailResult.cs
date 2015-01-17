@@ -2,7 +2,7 @@
 
 namespace NServiceBus.Mandrill
 {
-    public class MandrillEmailResult : IMessage
+    public class MandrillEmailResult
     {
         public MandrillSendMessageResponse Response { get; set; }
     }

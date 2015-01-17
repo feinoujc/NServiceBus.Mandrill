@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace NServiceBus.Mandrill
 {
-    public class SendMandrillEmail : IMessage
+    public class SendMandrillEmail
     {
         protected internal SendMandrillEmail()
         {
