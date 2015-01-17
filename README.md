@@ -26,7 +26,7 @@ public class EndpointConfig : IConfigureThisEndpoint, AsA_Server
  mail.FromEmail = "mandrill.net@example.com";
  mail.AddTo("nservicebus@example.com", "Udi Dahan");
  mail.Subject = "NServiceBus.Mandrill test";
- mail.Text = "Hello NSericeBus! \nRegards";
+ mail.Text = "Hello NServiceBus! \nRegards";
  Bus.SendEmail(mail);
 ```
 
