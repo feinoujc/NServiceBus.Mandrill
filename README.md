@@ -32,3 +32,30 @@ public class EndpointConfig : IConfigureThisEndpoint, AsA_Server
 
 
 This is internally forwarding a message to a custom NServiceBus Satellite that will process the request using the Mandrill api, meaning that this email will be sent using the same transactional behavior you expect with any NServiceBus operation
+
+## Handling responses
+
+Optionally, you can write a message handler to handle the responses coming back from the API. To do this, use the configuration method to configure the satellite to return the response message:
+
+```cs
+configuration.UseMandrill(apiKey: apiKey, replyResult: true);
+```
+
+You'll then need to write a standard message handler for message type `MandrillEmailResult`
+
+```cs
+class EmailResultHandler : IHandleMessages<MandrillEmailResult>
+{
+    public void Handle(MandrillEmailResult message)
+    {
+        //do something with the message result
+        Console.WriteLine("{0} {1} {2}", message.Response.Id, message.Response.Status, message.Response.Email);
+    }
+}
+```
+
+The Sample project includes an example using this approach to set a callback that retrieves the email content for all sent messages
+
+## API errors
+
+In the event that the Mandrill API returns an error (invalid api key, 5xx server errors, invalid message errors, etc) that is handled using the standard exception handling in NServiceBus, and may ultimately end up in the error queue, depending on your configuration. 
