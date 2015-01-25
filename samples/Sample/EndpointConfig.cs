@@ -12,7 +12,9 @@ namespace Sample
     {
         public void Customize(BusConfiguration configuration)
         {
-            var apiKey = ConfigurationManager.AppSettings["MANDRILL_API_KEY"];
+            var apiKey = Environment.GetEnvironmentVariable("MANDRILL_API_KEY", EnvironmentVariableTarget.Process) ?? 
+                ConfigurationManager.AppSettings["MANDRILL_API_KEY"];
+
             configuration.UseMandrill(apiKey: apiKey, replyResult: true);
             configuration.UsePersistence<InMemoryPersistence>();
         }

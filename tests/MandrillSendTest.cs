@@ -1,9 +1,4 @@
 ﻿using System;
-using System.IO;
-using Mandrill.Model;
-using Mandrill.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NServiceBus;
 using NServiceBus.Mandrill;
 using NServiceBus.Testing;
