@@ -1,5 +1,5 @@
 # NServiceBus.Mandrill
-NServiceBus add-on to allow for sending mandrill emails over the bus
+NServiceBus add-on to allow for sending [mandrill](https://mandrillapp.com/api/docs/) emails over the bus
 
 
 ## Getting Started
