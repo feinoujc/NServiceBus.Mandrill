@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Mandrill.Model;
 using Mandrill.Serialization;
 using Newtonsoft.Json;
@@ -36,13 +38,21 @@ namespace NServiceBus.Mandrill
         private string SerializeMessageBody(MandrillMessage message)
         {
             //to get around limitations of the nsb serializers, convert to json first
-            return JObject.FromObject(message, MandrillSerializer.Instance).ToString();
+            var sb = new StringBuilder();
+            using (var writer = new JsonTextWriter(new StringWriter(sb)))
+            {
+                MandrillSerializer.Instance.Serialize(writer, message);
+                writer.Flush();
+            }
+            return sb.ToString();
         }
 
         public MandrillMessage GetMessage()
         {
             using (var reader = new JsonTextReader(new StringReader(MessageBody)))
-                return JObject.Load(reader).ToObject<MandrillMessage>(MandrillSerializer.Instance);
+            {
+                return MandrillSerializer.Instance.Deserialize<MandrillMessage>(reader);
+            }
         }
 
         public void AddTemplateContent(string name, string content)
