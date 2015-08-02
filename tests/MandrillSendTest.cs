@@ -12,13 +12,7 @@ namespace Tests
     {
         static MandrillSendTest()
         {
-            Test.Initialize(config =>
-            {
-                config.AssembliesToScan(typeof(SendEmailTestHandler).Assembly,
-                    typeof(NServiceBus.Features.Mandrill).Assembly);
-                config.EnableFeature<NServiceBus.Features.Mandrill>();
-            });
-
+            Test.Initialize(config => config.EnableFeature<NServiceBus.Features.Mandrill>());
         }
 
         [Test]
@@ -27,13 +21,12 @@ namespace Tests
             Test.Handler<SendEmailTestHandler>()
                 .ExpectSendToDestination<SendMandrillEmail>((message, address) =>
                 {
-
                     var body = message.GetMessage();
 
                     Assert.AreEqual("Hello World", body.Text);
                     Assert.AreEqual("This is a test", body.Subject);
                     Assert.IsTrue(address.Queue.EndsWith(".mandrill", StringComparison.OrdinalIgnoreCase));
-                    
+
                     return true;
                 })
                 .OnMessage<SendEmail>(email => { });
