@@ -11,7 +11,7 @@
     <description>NServiceBus feature to send Mandrill API requests over the bus</description>
     <tags>Mandrill NServiceBus Email MailChimp</tags>
     <dependencies>
-      <dependency id="Mandrill.net" version="[1,2)" />
+      <dependency id="Mandrill.net" version="[1.0.2,2)" />
       <dependency id="NServiceBus" version="[5.0,6.0)"/>
     </dependencies>
   </metadata>  
