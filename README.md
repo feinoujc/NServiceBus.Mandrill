@@ -1,5 +1,6 @@
 # NServiceBus.Mandrill
 
+[![Build status](https://ci.appveyor.com/api/projects/status/0cpko3gwn9ye3v5o/branch/master?svg=true)](https://ci.appveyor.com/project/feinoujc/nservicebus-mandrill/branch/master)
 <a href="http://www.nuget.org/packages/NServiceBus.Mandrill/"><img src="http://img.shields.io/nuget/v/NServiceBus.Mandrill.svg?" title="NuGet Status"></a>
 
 NServiceBus add-on to allow for sending [mandrill](https://mandrillapp.com/api/docs/) emails over the bus
