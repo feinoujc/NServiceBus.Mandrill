@@ -6,6 +6,7 @@ using Mandrill.Model;
 using NServiceBus;
 using NServiceBus.AcceptanceTesting;
 using NServiceBus.AcceptanceTests.EndpointTemplates;
+using NServiceBus.AcceptanceTests.ScenarioDescriptors;
 using NServiceBus.Mandrill;
 using NServiceBus.MessageMutator;
 using NUnit.Framework;
@@ -45,6 +46,21 @@ namespace AcceptanceTests
                            && c.Replies[0].Response.Email == "recipient@mandrill.com"
                            && (c.Replies[0].Response.Status == MandrillSendMessageResponseStatus.Sent ||
                                c.Replies[0].Response.Status == MandrillSendMessageResponseStatus.Queued))
+                .Run();
+        }
+
+        [Test]
+        public void When_sending_invalid_request_error_is_thrown()
+        {
+            var badtemplate = Guid.NewGuid().ToString("N");
+            Scenario.Define<Context>()
+                .WithEndpoint<MandrillEndpointWithReply>(builder => builder
+                    .Given(bus =>
+                    {
+                        bus.SendEmailTemplate(new MandrillMessage(), badtemplate);
+                    }))
+                .AllowExceptions()
+                .Done(c => c.Exceptions?.IndexOf("Unknown_Template", StringComparison.Ordinal) > -1)
                 .Run();
         }
 
