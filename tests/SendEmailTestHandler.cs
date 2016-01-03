@@ -1,6 +1,5 @@
 ﻿using Mandrill.Model;
 using NServiceBus;
-using NServiceBus.Mandrill;
 
 namespace Tests
 {
