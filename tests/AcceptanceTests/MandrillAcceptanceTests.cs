@@ -50,21 +50,6 @@ namespace AcceptanceTests
         }
 
         [Test]
-        public void When_sending_invalid_request_error_is_thrown()
-        {
-            var badtemplate = Guid.NewGuid().ToString("N");
-            Scenario.Define<Context>()
-                .WithEndpoint<MandrillEndpointWithReply>(builder => builder
-                    .Given(bus =>
-                    {
-                        bus.SendEmailTemplate(new MandrillMessage(), badtemplate);
-                    }))
-                .AllowExceptions()
-                .Done(c => c.Exceptions?.IndexOf("Unknown_Template", StringComparison.Ordinal) > -1)
-                .Run();
-        }
-
-        [Test]
         public void When_sending_complex_template_content_using_xml_serializer_there_are_no_serialization_issues()
         {
             var api = new MandrillApi(Environment.GetEnvironmentVariable("MANDRILL_API_KEY"));
