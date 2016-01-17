@@ -50,7 +50,10 @@ namespace AcceptanceTests
         }
 
         [Test]
-        public void When_sending_complex_template_content_using_xml_serializer_there_are_no_serialization_issues()
+        [TestCase(typeof(XmlSerializer))]
+        [TestCase(typeof(JsonSerializer))]
+        [TestCase(typeof(BsonSerializer))]
+        public void When_sending_complex_message_body_serializer_works(Type serializerType)
         {
             var api = new MandrillApi(Environment.GetEnvironmentVariable("MANDRILL_API_KEY"));
             
@@ -100,19 +103,14 @@ namespace AcceptanceTests
             {
                 Scenario.Define<Context>()
                     .WithEndpoint<MandrillEndpointWithReply>(builder => builder
-                        .CustomConfig(configuration => configuration.UseSerialization<XmlSerializer>())
+                        .CustomConfig(configuration => configuration.UseSerialization(serializerType))
                         .Given(bus =>
                         {
                             bus.SendEmailTemplate(message, templateName);
                         }))
                         
                     .Done(c => c.Sent.Count == 1
-                               && c.Sent[0].TemplateName == templateName
-                               && c.Replies.Count == 2
-                               && c.Replies.Count(r => r.Response.Email == "test1@example.com") == 1
-                               && c.Replies.Count(r => r.Response.Email == "test2@example.com") == 1
-                               && (c.Replies.All(r => r.Response.Status == MandrillSendMessageResponseStatus.Sent ||
-                                                      c.Replies[0].Response.Status == MandrillSendMessageResponseStatus.Queued)))
+                               && c.Replies.Count == 2)
                     .Run();
             }
             finally

@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Mandrill", "src\NServiceBus.Mandrill\NServiceBus.Mandrill.csproj", "{DCFD54FD-AA31-47B0-AE9F-810AF5E2E5EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "tests\Tests.csproj", "{5E783E59-13BE-4CEA-8A69-88C13865F8EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "tests\UnitTests\Tests.csproj", "{5E783E59-13BE-4CEA-8A69-88C13865F8EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "samples\Sample\Sample.csproj", "{F319C485-9105-4EDF-8E5A-885393045C50}"
 EndProject

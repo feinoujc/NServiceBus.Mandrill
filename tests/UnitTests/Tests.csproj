@@ -31,23 +31,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mandrill.net, Version=2.0.22.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mandrill.net.2.0.22\lib\net45\Mandrill.net.dll</HintPath>
+      <HintPath>..\..\packages\Mandrill.net.2.0.22\lib\net45\Mandrill.net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Core, Version=5.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.5.2.12\lib\net45\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.5.2.12\lib\net45\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.Testing, Version=5.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.Testing.5.0.4\lib\net45\NServiceBus.Testing.dll</HintPath>
+      <HintPath>..\..\packages\NServiceBus.Testing.5.1.1\lib\net45\NServiceBus.Testing.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.0.5813.39031, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nunit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>..\..\packages\Nunit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -70,7 +70,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\NServiceBus.Mandrill\NServiceBus.Mandrill.csproj">
+    <ProjectReference Include="..\..\src\NServiceBus.Mandrill\NServiceBus.Mandrill.csproj">
       <Project>{dcfd54fd-aa31-47b0-ae9f-810af5e2e5ec}</Project>
       <Name>NServiceBus.Mandrill</Name>
     </ProjectReference>

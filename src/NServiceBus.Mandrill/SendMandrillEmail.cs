@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using Mandrill.Model;
 using Mandrill.Serialization;
@@ -8,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace NServiceBus.Mandrill
 {
+    [Serializable]
     public class SendMandrillEmail
     {
         protected internal SendMandrillEmail()
@@ -29,9 +32,9 @@ namespace NServiceBus.Mandrill
             TemplateContents = templateContents?.ToList();
         }
 
-        public string MessageBody { get; private set; }
-        public string TemplateName { get; private set; }
-        public List<MandrillTemplateContent> TemplateContents { get; private set; }
+        public string MessageBody { get; set; }
+        public string TemplateName { get; set; }
+        public List<MandrillTemplateContent> TemplateContents { get; set; }
 
         private string SerializeMessageBody(MandrillMessage message)
         {
