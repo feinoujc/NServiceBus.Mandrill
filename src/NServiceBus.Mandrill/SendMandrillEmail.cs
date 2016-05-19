@@ -15,11 +15,9 @@ namespace NServiceBus.Mandrill
     {
         protected internal SendMandrillEmail()
         {
-            TemplateContents = new List<MandrillTemplateContent>();
         }
 
         protected internal SendMandrillEmail(MandrillMessage message)
-            : this()
         {
             MessageBody = SerializeMessageBody(message);
         }

@@ -1,4 +1,8 @@
-﻿using NServiceBus.Mandrill;
+﻿using Mandrill;
+using NServiceBus.ConsistencyGuarantees;
+using NServiceBus.Mandrill;
+using NServiceBus.Routing;
+using NServiceBus.Transports;
 
 namespace NServiceBus.Features
 {
@@ -9,23 +13,26 @@ namespace NServiceBus.Features
             Defaults(settings =>
             {
                 var conventions = settings.Get<Conventions>();
-                conventions.AddSystemMessagesConventions(t => typeof(MandrillEmailResult).IsAssignableFrom(t));
-                conventions.AddSystemMessagesConventions(t => typeof(SendMandrillEmail).IsAssignableFrom(t));
+                conventions.AddSystemMessagesConventions(t => typeof (MandrillEmailResult).IsAssignableFrom(t));
+                conventions.AddSystemMessagesConventions(t => typeof (SendMandrillEmail).IsAssignableFrom(t));
             });
         }
 
-
         protected override void Setup(FeatureConfigurationContext context)
         {
-            var masterNodeAddress = context.Settings.Get<Address>("MasterNode.Address");
-            var replyResult = context.Settings.GetOrDefault<bool>("NServiceBus.Mandrill.ReplyResult");
-            var satelliteAddress = masterNodeAddress.SubScope("Mandrill");
+            string processorAddress;
+            var pipeline = context.AddSatellitePipeline("Mandrill.net message processor",
+                context.Settings.GetRequiredTransactionModeForReceives(),
+                PushRuntimeSettings.Default, "Mandrill",
+                out processorAddress);
 
-            context.Container.ConfigureComponent<MandrillSatellite>(DependencyLifecycle.InstancePerCall)
-                .ConfigureProperty(x => x.Disabled, false)
-                .ConfigureProperty(x => x.InputAddress, satelliteAddress)
-                .ConfigureProperty(x => x.ReplyAddress, masterNodeAddress)
-                .ConfigureProperty(x => x.ReplyResult, replyResult);
+            pipeline.Register("DispatchMandrillMessage",
+                b => new MandrillMessageDispatcher(b.Build<IMandrillMessagesApi>(), context.Settings.Get<bool>("NServiceBus.Mandrill.ReplyResult")),
+                "Dispatches messages");
+
+            var routing = context.Settings.Get<UnicastRoutingTable>();
+            routing.RouteToAddress(typeof (SendMandrillEmail), processorAddress);
+            routing.RouteToAddress(typeof (MandrillEmailResult), context.Settings.LocalAddress());
         }
     }
 }
