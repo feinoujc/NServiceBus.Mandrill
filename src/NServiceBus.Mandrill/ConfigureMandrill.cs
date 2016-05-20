@@ -1,6 +1,7 @@
 using System;
 using Mandrill;
 using NServiceBus.Configuration.AdvanceExtensibility;
+using NServiceBus.Mandrill;
 
 namespace NServiceBus
 {
@@ -28,7 +29,9 @@ namespace NServiceBus
 
             settings.RegisterComponents(x => x.RegisterSingleton(mandrillApi));
 
-            settings.EnableFeature<Features.Mandrill>();
+            var conventions = settings.Conventions().Conventions;
+            conventions.AddSystemMessagesConventions(t => typeof(MandrillEmailResult).IsAssignableFrom(t));
+            conventions.AddSystemMessagesConventions(t => typeof(SendMandrillEmail).IsAssignableFrom(t));
             return settings;
         }
     }

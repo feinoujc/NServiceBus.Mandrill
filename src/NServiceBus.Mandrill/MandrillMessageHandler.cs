@@ -1,32 +1,28 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Mandrill;
 using Mandrill.Model;
 using NServiceBus.Logging;
-using NServiceBus.Mandrill;
-using NServiceBus.Pipeline;
+using NServiceBus.Settings;
 
-namespace NServiceBus.Features
+namespace NServiceBus.Mandrill
 {
-    public class MandrillMessageDispatcher : PipelineTerminator<ISatelliteProcessingContext>
+    internal class MandrillMessageHandler : IHandleMessages<SendMandrillEmail>
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (MandrillMessageHandler));
         private readonly IMandrillMessagesApi _messagesApi;
-        private readonly bool _replyResult;
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (MandrillMessageDispatcher));
+        private readonly ReadOnlySettings _settings;
 
-        public MandrillMessageDispatcher(IMandrillMessagesApi messagesApi, bool replyResult)
+        public MandrillMessageHandler(IMandrillMessagesApi messagesApi, ReadOnlySettings settings)
         {
             _messagesApi = messagesApi;
-            _replyResult = replyResult;
+            _settings = settings;
         }
 
-        protected override async Task Terminate(ISatelliteProcessingContext context)
+        public async Task Handle(SendMandrillEmail command, IMessageHandlerContext context)
         {
-            var command = DeserializeMessageBody(context);
-
-            Debug.Assert(command != null, "command != null");
+            Debug.Assert(command?.MessageBody != null, "command?.MessageBody != null");
 
             var results = await SendEmails(command).ConfigureAwait(false);
 
@@ -43,13 +39,11 @@ namespace NServiceBus.Features
                         result.Email);
                 }
 
-                if (_replyResult)
+                if (_settings.GetOrDefault<bool>("NServiceBus.Mandrill.ReplyResult"))
                 {
-                   //want to send back the reply to the main queue
-                   throw new NotImplementedException("Can't dispatch replies yet");
+                    await context.Reply(new MandrillEmailResult {Response = result});
                 }
             }
-            
         }
 
         private Task<IList<MandrillSendMessageResponse>> SendEmails(SendMandrillEmail command)
@@ -59,15 +53,7 @@ namespace NServiceBus.Features
                 return _messagesApi.SendTemplateAsync(command.GetMessage(), command.TemplateName,
                     command.TemplateContents);
             }
-            else
-            {
-                return _messagesApi.SendAsync(command.GetMessage());
-            }
-        }
-
-        private SendMandrillEmail DeserializeMessageBody(ISatelliteProcessingContext context)
-        {
-            throw new NotImplementedException("Can't deserialize messages yet");
+            return _messagesApi.SendAsync(command.GetMessage());
         }
     }
 }

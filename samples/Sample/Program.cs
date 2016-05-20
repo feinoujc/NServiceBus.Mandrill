@@ -17,9 +17,15 @@ namespace Sample
             var endpoint = Endpoint.Start(configuration).GetAwaiter().GetResult();
 
             var sender = new EmailSender();
-            sender.Start(endpoint).GetAwaiter().GetResult();
+            try
+            {
+                sender.Start(endpoint).GetAwaiter().GetResult();
+            }
+            finally
+            {
+                endpoint.Stop();
+            }
 
-            endpoint.Stop();
         }
     }
 }
